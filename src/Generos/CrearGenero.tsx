@@ -1,13 +1,21 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import Button from '../Utils/Button';
+
+import FormularioGeneros from './FormularioGeneros';
+
 
 const CrearGenero = () => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   return (
     <>
     <h3>Crear Genero</h3>
-    <Button onClick={()=>navigate('/generos')}>Salvar</Button>
+
+    <FormularioGeneros modelo={{nombre:''}}
+     onSubmit={async valores=>{
+      await new Promise(r=>setTimeout(r,3000))
+      console.log(valores);
+    }} 
+       
+    />
+     
     </>
   )
 }

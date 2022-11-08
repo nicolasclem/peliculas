@@ -9,7 +9,10 @@ import {
 } from "react-router-dom";
 //import Home from './Home';
 import rutas from './routeConfig';
+import configurarValidaciones from './validaciones';
 
+
+configurarValidaciones()
 function App() {
 
   return (
