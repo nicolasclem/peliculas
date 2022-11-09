@@ -7,13 +7,45 @@ import FromGroupFecha from '../Utils/FromGroupFecha';
 import FormGroupImagen from '../Utils/FormGroupImagen';
 import Button from '../Utils/Button';
 import { Link } from 'react-router-dom';
+import SelectorMultiple from '../Utils/SelectorMultiple';
+import { generoDTO } from '../Generos/generosModel';
+import { useState } from 'react';
+import { selectorMultipleModel } from '../Utils/SelectorMultiple';
+import { cineDTO } from '../Cines/cines.model';
+
 
 
 const FormularioPeliculas = (props: formularioPeliculasProps) => {
+
+    const [generosSeleccionados,setGenerosSeleccionados]= 
+    useState(mapear(props.generosSeleccionados));
+
+    const [generosNoSeleccionados,setGenerosNoSeleccionados]= 
+    useState(mapear(props.generosNoSeleccionados));
+
+
+
+    const [cinesSeleccionados, setCinesSeleccionados]= 
+    useState(mapear(props.cinesSeleccionados))
+
+    const [cinesNoSeleccionados, setCinesNoSeleccionados]= 
+    useState(mapear(props.cinesNoSeleccionados))
+
+
+    function mapear(arreglo: {id:number,nombre:string}[]):selectorMultipleModel[]{
+        return arreglo.map(valor=>{
+            return {llave: valor.id, valor: valor.nombre }
+        })
+    }
   return (
     <Formik
         initialValues={props.modelo}
-        onSubmit={props.onSubmit}
+        onSubmit={(valores, acciones)=>{
+            valores.generosIds= generosSeleccionados.map(valor=>valor.llave)
+            valores.cinesIds=cinesSeleccionados.map(valor=>valor.llave)
+            props.onSubmit(valores, acciones)
+        }
+        }
         validationSchema={Yup.object({
 
             titulo: Yup.string().required('Campo requerido').primerLetraMayuscula()
@@ -28,7 +60,24 @@ const FormularioPeliculas = (props: formularioPeliculasProps) => {
             <FormGroupText label='Trailer' campo='trailer' />
             <FromGroupFecha campo='fechaLanzamiento' label='Fecha Lanzamiento' />
             <FormGroupImagen campo='poster' label='Poster' imagenURL={props.modelo.posterURL}/>
-
+            <div className='form-group' >
+                <label>Generos</label>
+                <SelectorMultiple  seleccionados={generosSeleccionados}
+                noSeleccionados={generosNoSeleccionados}
+                onChange={(seleccionados,noSeleccionados)=>{
+                    setGenerosSeleccionados(seleccionados);
+                    setGenerosNoSeleccionados(noSeleccionados);
+                }}/>
+            </div>
+            <div className='form-group' >
+                <label>Cines</label>
+                <SelectorMultiple  seleccionados={cinesSeleccionados}
+                noSeleccionados={cinesNoSeleccionados}
+                onChange={(seleccionados,noSeleccionados)=>{
+                    setCinesSeleccionados(seleccionados);
+                    setCinesNoSeleccionados(noSeleccionados);
+                }}/>
+            </div>
             <Button disabled={formikProps.isSubmitting} type="submit">Enviar</Button>
             <Link className="btn btn-secondary" to="/">Cancelar</Link>
         </Form>
@@ -41,5 +90,9 @@ const FormularioPeliculas = (props: formularioPeliculasProps) => {
 interface formularioPeliculasProps{
     modelo: peliculaCreacionDTO
     onSubmit(valores:peliculaCreacionDTO, acciones: FormikHelpers<peliculaCreacionDTO>):void
+    generosSeleccionados: generoDTO[];
+    generosNoSeleccionados:generoDTO[];
+    cinesSeleccionados: cineDTO[];
+    cinesNoSeleccionados: cineDTO[]
 }
 export default FormularioPeliculas
