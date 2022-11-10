@@ -2,6 +2,7 @@
 import { cineDTO } from '../Cines/cines.model'
 import { generoDTO } from '../Generos/generosModel'
 import FormularioPeliculas from './FormularioPeliculas'
+import { actorPeliculaDTO } from '../Actores/actores.model';
 
 const EditarPelicula = () => {
   const generosNoSeleccionados: generoDTO[] = [
@@ -21,11 +22,15 @@ const EditarPelicula = () => {
     {id:1,nombre:'Cinema Center'}
   
   ]
+  const actoresSelecciondos: actorPeliculaDTO[]=[
+    {id:1,nombre:"Ricardo Darin",personaje:'',foto:'https://m.media-amazon.com/images/M/MV5BMTgxOTAyMTAzNV5BMl5BanBnXkFtZTcwODE2MTUzOA@@._V1_UX214_CR0,0,214,317_AL_.jpg'}
+  ]
   return (
     <>
     <div>Editar Pelicula</div>
 
     <FormularioPeliculas
+    actoresSeleccionados={actoresSelecciondos}
     cinesSeleccionados={cinesSeleccionados}
     cinesNoSeleccionados={cinesNoSeleccionados}
      generosNoSeleccionados={generosNoSeleccionados}

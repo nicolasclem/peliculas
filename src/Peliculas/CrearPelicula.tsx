@@ -19,6 +19,7 @@ const CrearPelicula = () => {
     <div>Crear Pelicula</div>
 
     <FormularioPeliculas
+    actoresSeleccionados={[]}
       cinesNoSeleccionados={cines}
       cinesSeleccionados={[]}
       generosNoSeleccionados={generos}

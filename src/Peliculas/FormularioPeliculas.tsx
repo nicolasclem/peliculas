@@ -12,6 +12,8 @@ import { generoDTO } from '../Generos/generosModel';
 import { useState } from 'react';
 import { selectorMultipleModel } from '../Utils/SelectorMultiple';
 import { cineDTO } from '../Cines/cines.model';
+import TypesaheadActores from '../Actores/TypesaheadActores';
+import { actorPeliculaDTO } from '../Actores/actores.model';
 
 
 
@@ -31,7 +33,8 @@ const FormularioPeliculas = (props: formularioPeliculasProps) => {
     const [cinesNoSeleccionados, setCinesNoSeleccionados]= 
     useState(mapear(props.cinesNoSeleccionados))
 
-
+    const [actoresSeleccionados,setActoresSeleccionados]=
+    useState<actorPeliculaDTO[]>(props.actoresSeleccionados)
     function mapear(arreglo: {id:number,nombre:string}[]):selectorMultipleModel[]{
         return arreglo.map(valor=>{
             return {llave: valor.id, valor: valor.nombre }
@@ -43,6 +46,7 @@ const FormularioPeliculas = (props: formularioPeliculasProps) => {
         onSubmit={(valores, acciones)=>{
             valores.generosIds= generosSeleccionados.map(valor=>valor.llave)
             valores.cinesIds=cinesSeleccionados.map(valor=>valor.llave)
+            valores.actores=actoresSeleccionados
             props.onSubmit(valores, acciones)
         }
         }
@@ -78,6 +82,34 @@ const FormularioPeliculas = (props: formularioPeliculasProps) => {
                     setCinesNoSeleccionados(noSeleccionados);
                 }}/>
             </div>
+            <div className='form-group'>
+              <TypesaheadActores
+                onAdd={actores=>{
+                    setActoresSeleccionados(actores);
+                }}
+                onRemove={actor=>{
+                    const actores= actoresSeleccionados.filter(x=>x !==actor);
+                    setActoresSeleccionados(actores);
+                }}
+                actores={actoresSeleccionados}
+                listadoUI={(actor: actorPeliculaDTO)=>
+                <>
+                    {actor.nombre} / <input placeholder='Personaje'
+                    type='text' value={actor.personaje}
+                    onChange={e=>{
+                        const indice = actoresSeleccionados
+                        .findIndex(x=>x.id === actor.id);
+
+                        const actores=[...actoresSeleccionados];
+                        actores[indice].personaje= e.currentTarget.value;
+                        setActoresSeleccionados(actores);
+                    }} 
+                    />
+                </>
+                }
+              />
+
+            </div>
             <Button disabled={formikProps.isSubmitting} type="submit">Enviar</Button>
             <Link className="btn btn-secondary" to="/">Cancelar</Link>
         </Form>
@@ -93,6 +125,7 @@ interface formularioPeliculasProps{
     generosSeleccionados: generoDTO[];
     generosNoSeleccionados:generoDTO[];
     cinesSeleccionados: cineDTO[];
-    cinesNoSeleccionados: cineDTO[]
+    cinesNoSeleccionados: cineDTO[];
+    actoresSeleccionados: actorPeliculaDTO[];
 }
 export default FormularioPeliculas
