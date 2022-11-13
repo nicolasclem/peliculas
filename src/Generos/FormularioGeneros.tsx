@@ -13,6 +13,7 @@ const FormularioGeneros = (props:formularioGenerosProps) => {
       validationSchema={Yup.object({
         nombre: Yup.string()
           .required("Este campo(Nombre) es requerido")
+          .max(50,'Longitud maxima es de 50 caracteres')
           .primerLetraMayuscula(),
       })}
     >
