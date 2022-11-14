@@ -19,3 +19,6 @@ form > a {
 .pointer{
   cursor: pointer;
 }
+.table a{
+  margin-right: 0.5rem;
+}
