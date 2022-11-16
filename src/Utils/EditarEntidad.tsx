@@ -20,13 +20,29 @@ export default function EditarEntidad<TCreacion,TLectura>(props: editarEntidadPr
     },[])
   async function editar(entidadEditar: TCreacion){
     try{
+      if(props.transformarFromData){
+        const formData= props.transformarFromData(entidadEditar);
+      await axios(
+        {
+          method:'put',
+          url:`${props.url}/${id}`,
+          data:formData,
+          headers:{'Content-Type':'multipart/form-data'}
+      
+        }
+      )
+      navigate(props.urlIndice);
+      }
+      else {
       await axios.put(`${props.url}/${id}`,entidadEditar);
       navigate(props.urlIndice);
+      }
     }
     catch(error){
       console.log(error);
       
     }
+    
   }
   return (
     <>
@@ -41,6 +57,7 @@ interface editarEntidadProps<TCreacion,TLectura>{
     nombreEntidad: string;
     children(entidad:TCreacion, editar:(editar: TCreacion)=>void):ReactElement
     transformar(entidad: TLectura): TCreacion;
+    transformarFromData?(modelo: TCreacion):FormData
 }
 
 EditarEntidad.defaultProps ={

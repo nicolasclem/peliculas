@@ -1,12 +1,42 @@
-import React from 'react'
+
+import EditarEntidad from '../Utils/EditarEntidad'
+import { urlActores } from '../Utils/endpoints'
+import { convertirActorAFormData } from '../Utils/formDataUtils'
+import { actorCreacionDTO, actorDTO } from './actores.model'
 import FormularioActores from './FormularioActores'
 
 const EditarActor = () => {
+
+  const transformar = (actor : actorDTO)=>{
+    
+    return{
+      nombre: actor.nombre,
+      fotoURl: actor.foto,
+      biografia: actor.biografia,
+      fechaNacimiento: new Date(actor.fechaNacimiento)
+    }
+
+  }
   return (
     <>
-    <h3>Editar Actor</h3>
 
-    <FormularioActores 
+<EditarEntidad<actorCreacionDTO, actorDTO>
+      url={urlActores}
+      urlIndice="/actores"
+      nombreEntidad="Actores"
+      transformar={transformar}
+      transformarFromData={convertirActorAFormData}
+      >
+      {(entidad,editar)=>
+      <FormularioActores modelo={entidad}
+        onSubmit={async valores=>{
+        await editar(valores)
+        }}
+    />}
+    </EditarEntidad>  
+    {/* <h3>Editar Actor</h3> */}
+
+    {/* <FormularioActores 
     modelo={{nombre:'Bauti Clem',
     biografia:`#Bauti
 Bauti es mi **HIJO**`,
@@ -16,7 +46,7 @@ Bauti es mi **HIJO**`,
     
     onSubmit={valores=> console.log(valores)
     }
-    />
+    /> */}
     </>
   )
 }
