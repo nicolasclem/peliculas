@@ -3,3 +3,4 @@ const apiURL= process.env.REACT_APP_API_URL// me tira undefined   resolver!!!!=>
 
 export const urlGeneros= `${apiURL}/generos`;
 export const urlActores=`${apiURL}/actores`;
+export const urlCines=`${apiURL}/cines`;
